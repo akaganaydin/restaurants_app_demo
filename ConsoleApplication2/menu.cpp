@@ -14,7 +14,7 @@ void showMenu() {
         cout << "---- Menu ----" << endl;
         cout << "1. View Restaurant Menu" << endl;
         cout << "2. Menu Update" << endl;
-        cout << "3. Option 3" << endl;
+        cout << "3. Customer Reviews" << endl;
         cout << "0. Exit" << endl;
         cout << "Choose an option: ";
 
@@ -46,7 +46,7 @@ void handleSelection(int choice) {
         menuUpdate();
         break;
     case 3:
-        option3();
+        customerReviews();
         break;
     case 0:
         cout << "Exiting..." << endl;
@@ -123,6 +123,7 @@ void viewMenu() {
     }
 }
 
+// List of food items and their prices
 vector<string> foods = {
     "Hamburger - $10.99",
     "Pizza - $12.99",
@@ -136,6 +137,7 @@ vector<string> foods = {
     "Spring Rolls - $6.99"
 };
 
+// List of drink items and their prices
 vector<string> drinks = {
     "Sprite - $2.50",
     "Fanta - $2.50",
@@ -146,6 +148,9 @@ vector<string> drinks = {
     "Iced Coffee - $3.50",
     "Wine - $8.00"
 };
+
+// Initialize the reviews vector
+std::vector<CustomerReview> reviews;
 
 // Function to update the menu
 void menuUpdate() {
@@ -243,7 +248,131 @@ void menuUpdate() {
     system("pause"); // Pause before returning to the menu
 }
 
-// Function for option 3
-void option3() {
-    cout << "You selected Option 3." << endl;
+// Function for customer reviews
+void customerReviews() {
+    int choice;
+    while (true) {
+        system("CLS"); // Clear the console
+        cout << "---- Customer Reviews ----" << endl;
+        cout << "1. Add Review" << endl;
+        cout << "2. View Reviews" << endl;
+        cout << "3. Delete Review" << endl;
+        cout << "0. Return to Main Menu" << endl;
+        cout << "Choose an option: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            addCustomerReview(); // Call the function to add a review
+            break;
+        case 2:
+            viewCustomerReviews(); // Yet to be implemented
+            break;
+        case 3:
+            deleteCustomerReview(); // Yet to be implemented
+            break;
+        case 0:
+            return; // Return to main menu
+        default:
+            cout << "Invalid selection! Please try again." << endl;
+            break;
+        }
+    }
+}
+
+// Function for adding customer reviews
+void addCustomerReview() {
+    system("CLS"); // Clear the console before showing the review form
+
+    CustomerReview newReview;
+
+    cout << "Enter your name: ";
+    cin >> newReview.username; // Get the username
+
+    // Get the rating and validate input
+    while (true) {
+        cout << "Rate us (0 - 5): ";
+        cin >> newReview.rating;
+        if (newReview.rating >= 0 && newReview.rating <= 5) {
+            break; // Valid input
+        }
+        else {
+            cout << "Invalid rating! Please enter a number between 0 and 5." << endl;
+        }
+    }
+
+    cout << "Write your comment: ";
+    cin.ignore(); // Clear the newline character from input buffer
+    getline(cin, newReview.comment); // Get the comment
+
+    // Add the new review to the vector
+    reviews.push_back(newReview);
+    cout << "Your review has been added successfully!" << endl;
+
+    system("pause"); // Pause before returning to the customer reviews menu
+}
+
+// Function to view costumer reviews
+void viewCustomerReviews() {
+    system("CLS"); // Clear the console
+
+    cout << "---- Customer Reviews ----" << endl;
+
+    // Check if there are any reviews
+    if (reviews.empty()) {
+        cout << "No reviews available." << endl;
+    }
+    else {
+        // Iterate through and display each review
+        for (size_t i = 0; i < reviews.size(); ++i) {
+            cout << i + 1 << ". " << reviews[i].username << " rated us "
+                << reviews[i].rating << "/5" << endl;
+            cout << "Comment: " << reviews[i].comment << endl << endl;
+        }
+    }
+
+    cout << "Press any key to return to the previous menu..." << endl;
+    cin.ignore(); // Clear the newline character from input buffer
+    cin.get(); // Wait for a key press
+}
+
+// Function for deleting costumer reviews
+void deleteCustomerReview() {
+    system("CLS"); // Clear the console
+
+    cout << "---- Delete Customer Review ----" << endl;
+
+    // Check if there are any reviews to delete
+    if (reviews.empty()) {
+        cout << "No reviews available to delete." << endl;
+        cout << "Press any key to return to the previous menu..." << endl;
+        cin.ignore();
+        cin.get();
+        return; // Return to the previous menu
+    }
+
+    // Display existing reviews
+    for (size_t i = 0; i < reviews.size(); ++i) {
+        cout << i + 1 << ". " << reviews[i].username << " rated us "
+            << reviews[i].rating << "/5" << endl;
+        cout << "Comment: " << reviews[i].comment << endl << endl;
+    }
+
+    int reviewIndex;
+    cout << "Select the number of the review you want to delete (1-"
+        << reviews.size() << "): ";
+    cin >> reviewIndex;
+
+    // Validate the selected index
+    if (reviewIndex >= 1 && reviewIndex <= reviews.size()) {
+        reviews.erase(reviews.begin() + (reviewIndex - 1)); // Remove the selected review
+        cout << "Review deleted successfully!" << endl;
+    }
+    else {
+        cout << "Invalid selection! No review deleted." << endl;
+    }
+
+    cout << "Press any key to return to the previous menu..." << endl;
+    cin.ignore(); // Clear the newline character from input buffer
+    cin.get(); // Wait for a key press
 }
