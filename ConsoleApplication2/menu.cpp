@@ -81,25 +81,33 @@ void viewMenu() {
 
     // Validate food choice
     while (true) {
-        cout << "Select a food item (1-" << foods.size() << "): "; // Updated to show current food count
+        cout << "Select a food item (1-" << foods.size() << "): ";
         cin >> foodChoice;
-        if (foodChoice >= 1 && foodChoice <= foods.size()) {
-            break; // Valid input
+
+        if (cin.fail() || foodChoice < 1 || foodChoice > foods.size()) {
+            cin.clear(); // Clear the fail state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "Invalid selection! Please try again." << endl;
         }
         else {
-            cout << "Invalid selection! Please try again." << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+            break; // Valid input
         }
     }
 
     // Validate drink choice
     while (true) {
-        cout << "Select a drink item (1-" << drinks.size() << "): "; // Updated to show current drink count
+        cout << "Select a drink item (1-" << drinks.size() << "): ";
         cin >> drinkChoice;
-        if (drinkChoice >= 1 && drinkChoice <= drinks.size()) {
-            break; // Valid input
+
+        if (cin.fail() || drinkChoice < 1 || drinkChoice > drinks.size()) {
+            cin.clear(); // Clear the fail state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "Invalid selection! Please try again." << endl;
         }
         else {
-            cout << "Invalid selection! Please try again." << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+            break; // Valid input
         }
     }
 
@@ -293,11 +301,15 @@ void addCustomerReview() {
     while (true) {
         cout << "Rate us (0 - 5): ";
         cin >> newReview.rating;
-        if (newReview.rating >= 0 && newReview.rating <= 5) {
-            break; // Valid input
+
+        // Check if the input is valid
+        if (cin.fail() || newReview.rating < 0 || newReview.rating > 5) {
+            cin.clear(); // Clear the fail state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "Invalid rating! Please enter a number between 0 and 5." << endl;
         }
         else {
-            cout << "Invalid rating! Please enter a number between 0 and 5." << endl;
+            break; // Valid input
         }
     }
 
@@ -311,6 +323,7 @@ void addCustomerReview() {
 
     system("pause"); // Pause before returning to the customer reviews menu
 }
+
 
 // Function to view costumer reviews
 void viewCustomerReviews() {
